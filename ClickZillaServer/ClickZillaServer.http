@@ -1,0 +1,6 @@
+@ClickZillaServer_HostAddress = http://localhost:5009
+
+GET {{ClickZillaServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
