@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  clickzillaserver:
+    build:
+      context: "/Users/denis/RiderProjects/ClickZillaServer"
+      dockerfile: "ClickZillaServer/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/ClickZillaServer.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "clickzillaserver:dev"
+    ports: []
+    volumes:
+    - "/Users/denis/RiderProjects/ClickZillaServer/ClickZillaServer:/app:rw"
+    - "/Users/denis/RiderProjects/ClickZillaServer:/src:rw"
+    - "/Users/denis/.nuget/packages:/home/app/.nuget/packages"
+    working_dir: "/app"

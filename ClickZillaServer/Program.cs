@@ -1,8 +1,27 @@
+using ClickZillaServer.Models;
+using Microsoft.EntityFrameworkCore;
+using Repositories;
+using Services;
+
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
+
+builder.Services.AddDbContext<ClickZillaContext>(
+    options =>
+    {
+        options.UseNpgsql(
+            configuration.GetConnectionString("DefaultConnection"));
+    });
+
+//Repo
+builder.Services.AddScoped<UserRepository>();
+//Services
+builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();
 
@@ -32,6 +51,12 @@ app.MapGet("/weatherforecast", () =>
         return forecast;
     })
     .WithName("GetWeatherForecast");
+
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
 
