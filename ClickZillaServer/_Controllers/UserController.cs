@@ -81,13 +81,13 @@ namespace ClickZillaServer.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest updateModel)
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest updateRequest)
         {
-            Debug.Assert(updateModel != null, "User model cannot be null");
-            var user = await _userService.GetUserAsync(updateModel.UserId);
+            Debug.Assert(updateRequest != null, "User model cannot be null");
+            var user = await _userService.GetUserAsync(updateRequest.UserId);
 
-            user.UserExp = updateModel.UserExp ?? user.UserExp;
-            user.EnemiesKilled = updateModel.EnemiesKilled ?? user.EnemiesKilled;
+            user.UserExp = updateRequest.UserExp ?? user.UserExp;
+            user.EnemiesKilled = updateRequest.EnemiesKilled ?? user.EnemiesKilled;
 
             await _userService.UpdateUserAsync(user);
             return Ok();
