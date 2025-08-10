@@ -1,51 +1,28 @@
 using System.Security.Cryptography;
 using System.Text;
-using ClickZillaServer.Models;
+using Data;
 using Repositories;
 
 namespace Services
 {
-    public class UserService 
+    public class UserService : BaseService<User, UserRepository>
     {
-        private readonly UserRepository _userRepository;
 
-        public UserService(UserRepository userRepository)
+        public UserService(UserRepository userRepository) : base(userRepository)
         {
-            _userRepository = userRepository;
         }
 
-        public async Task<User> GetUserAsync(Guid id)
-        {
-            return await _userRepository.GetByIdAsync(id);
-        }
+      
 
         public async Task<User> GetUserAsync(string name)
         {
-            return await _userRepository.GetByNameAsync(name);
+            return await _repository.GetByUserNameAsync(name);
         }
-        public async Task<List<User>> GetAllUsersAsync()
-        {
-            return await _userRepository.GetAllAsync();
-        }
-
-        public async Task AddUserAsync(User user)
-        {
-            await _userRepository.AddAsync(user);
-        }
-
-        public async Task UpdateUserAsync(User user)
-        {
-            await _userRepository.UpdateAsync(user);
-        }
-
-        public async Task DeleteUserAsync(int id)
-        {
-            await _userRepository.DeleteAsync(id);
-        }
+       
 
         public async Task<bool> AuthorizeAsync(string userName, string password)
         {
-            var users = await _userRepository.GetAllAsync();
+            var users = await _repository.GetAllAsync();
             var user = users.FirstOrDefault(u => u.UserName == userName);
             if (user == null) return false;
             var hash = HashPassword(password);

@@ -1,6 +1,4 @@
-﻿using Data;
-
-namespace ClickZillaServer.Models;
+﻿namespace Data;
 
 public partial class User : IEntity
 {

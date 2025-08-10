@@ -18,7 +18,7 @@ public class LeaderboardController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetLeaderboard()
     {
-        var users = await _userService.GetAllUsersAsync();
+        var users = await _userService.GetAllAsync();
 
         var leaderboardEntity = users.OrderByDescending(u => u.UserExp).ToList().AsEnumerable();
 

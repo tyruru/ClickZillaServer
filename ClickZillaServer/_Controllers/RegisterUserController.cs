@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using ClickZillaServer.Models;
+using Data;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -20,7 +21,7 @@ public class RegisterUserController : ControllerBase
     public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
     {
         Debug.Assert(request != null, "Request cannot be null");
-        var users = await _userService.GetAllUsersAsync();
+        var users = await _userService.GetAllAsync();
         if (users.Any(u => u.UserName == request.UserName))
             return BadRequest("User already exists");
         var userEntity = new User
@@ -30,7 +31,7 @@ public class RegisterUserController : ControllerBase
             EnemiesKilled = 0,
             Password = _userService.HashPassword(request.Password)
         };
-        await _userService.AddUserAsync(userEntity);
+        await _userService.AddAsync(userEntity);
         return Ok();
     }
 }

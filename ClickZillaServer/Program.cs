@@ -1,4 +1,4 @@
-using ClickZillaServer.Models;
+using Data;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Services;
@@ -20,6 +20,8 @@ builder.Services.AddDbContext<ClickZillaContext>(
 
 //Repo
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<EnemyRepository>();
+builder.Services.AddScoped<LocationRepository>();
 //Services
 builder.Services.AddScoped<UserService>();
 

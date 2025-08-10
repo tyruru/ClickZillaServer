@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace ClickZillaServer.Models;
+namespace Data;
 
 public partial class ClickZillaContext : DbContext
 {
@@ -15,6 +13,10 @@ public partial class ClickZillaContext : DbContext
     {
     }
 
+    public virtual DbSet<Enemy> Enemies { get; set; }
+
+    public virtual DbSet<Location> Locations { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -23,6 +25,42 @@ public partial class ClickZillaContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Enemy>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("enemy_pk");
+
+            entity.ToTable("enemy");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Exp)
+                .HasDefaultValue(0)
+                .HasColumnName("exp");
+            entity.Property(e => e.Hp).HasColumnName("hp");
+            entity.Property(e => e.LocationId).HasColumnName("location_id");
+            entity.Property(e => e.Name).HasColumnName("name");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.Enemies)
+                .HasForeignKey(d => d.LocationId)
+                .HasConstraintName("enemy_location_fk");
+        });
+
+        modelBuilder.Entity<Location>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("location_pk");
+
+            entity.ToTable("location");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Name).HasColumnName("name");
+            entity.Property(e => e.Needexp)
+                .HasDefaultValue(0)
+                .HasColumnName("needexp");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("Users_pkey");
