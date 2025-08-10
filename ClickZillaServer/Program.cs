@@ -24,6 +24,8 @@ builder.Services.AddScoped<EnemyRepository>();
 builder.Services.AddScoped<LocationRepository>();
 //Services
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<EnemyService>();
+// builder.Services.AddScoped<LocationService>();
 
 var app = builder.Build();
 

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/Repositories/BaseRepository.cs">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/Repositories/BaseRepository.cs" />
+              <option name="updatedContent" value="using Microsoft.EntityFrameworkCore;&#10;using System.Collections.Generic;&#10;using System.Threading.Tasks;&#10;using Data;&#10;&#10;namespace Repositories&#10;{&#10;    public class BaseRepository&lt;TEntity&gt; where TEntity : class&#10;    {&#10;        protected readonly ClickZillaContext _context;&#10;        protected readonly DbSet&lt;TEntity&gt; _dbSet;&#10;&#10;        public BaseRepository(ClickZillaContext context)&#10;        {&#10;            _context = context;&#10;            _dbSet = context.Set&lt;TEntity&gt;();&#10;        }&#10;&#10;        public virtual async Task&lt;List&lt;TEntity&gt;&gt; GetAllAsync()&#10;        {&#10;            return await _dbSet.ToListAsync();&#10;        }&#10;&#10;        public virtual async Task&lt;TEntity&gt; GetByIdAsync(int id)&#10;        {&#10;            return await _dbSet.FindAsync(id);&#10;        }&#10;&#10;        public virtual async Task AddAsync(TEntity entity)&#10;        {&#10;            _dbSet.Add(entity);&#10;            await _context.SaveChangesAsync();&#10;        }&#10;&#10;        public virtual async Task UpdateAsync(TEntity entity)&#10;        {&#10;            _dbSet.Update(entity);&#10;            await _context.SaveChangesAsync();&#10;        }&#10;&#10;        public virtual async Task DeleteAsync(int id)&#10;        {&#10;            var entity = await _dbSet.FindAsync(id);&#10;            if (entity != null)&#10;            {&#10;                _dbSet.Remove(entity);&#10;                await _context.SaveChangesAsync();&#10;            }&#10;        }&#10;    }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/Repositories/EnemyRepository.cs">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/Repositories/EnemyRepository.cs" />
+              <option name="updatedContent" value="using Data;&#10;&#10;namespace Repositories&#10;{&#10;    public class EnemyRepository : BaseRepository&lt;Enemy&gt;&#10;    {&#10;        public EnemyRepository(ClickZillaContext context) : base(context) { }&#10;        // Enemy-specific methods can be added here&#10;    }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/Repositories/LocationRepository.cs">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/Repositories/LocationRepository.cs" />
+              <option name="updatedContent" value="using Data;&#10;&#10;namespace Repositories&#10;{&#10;    public class LocationRepository : BaseRepository&lt;Location&gt;&#10;    {&#10;        public LocationRepository(ClickZillaContext context) : base(context) { }&#10;        // Location-specific methods can be added here&#10;    }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/Repositories/UserRepository.cs">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/Repositories/UserRepository.cs" />
+              <option name="originalContent" value="using Data;&#10;using Data;&#10;using Microsoft.EntityFrameworkCore;&#10;&#10;namespace Repositories&#10;{&#10;    public class UserRepository&#10;    {&#10;        private readonly ClickZillaContext _context;&#10;        private readonly DbSet&lt;User&gt; _dbSet;&#10;&#10;        public UserRepository(ClickZillaContext context)&#10;        {&#10;            _dbSet = context.Set&lt;User&gt;();&#10;            _context = context;&#10;        }&#10;&#10;        public async Task&lt;User&gt; GetByIdAsync(Guid id)&#10;        {&#10;            var result = await _dbSet&#10;                .FirstOrDefaultAsync(entity =&gt; entity.Id == id);&#10;&#10;            if (result == null)&#10;                throw new Exception(&quot;Data not found&quot;);&#10;&#10;            return result;&#10;        }&#10;&#10;        public async Task&lt;User&gt; GetByNameAsync(string name)&#10;        {&#10;            var result = await _dbSet&#10;                .FirstOrDefaultAsync(entity =&gt; entity.UserName == name);&#10;&#10;            if (result == null)&#10;                throw new Exception(&quot;Data not found&quot;);&#10;&#10;            return result;&#10;        }&#10;&#10;        public async Task&lt;List&lt;User&gt;&gt; GetAllAsync()&#10;        {&#10;            return await _dbSet.ToListAsync();&#10;        }&#10;&#10;        public async Task AddAsync(User user)&#10;        {&#10;            _context.Users.Add(user);&#10;            await _context.SaveChangesAsync();&#10;        }&#10;&#10;        public async Task UpdateAsync(User user)&#10;        {&#10;            _context.Users.Update(user);&#10;            await _context.SaveChangesAsync();&#10;        }&#10;&#10;        public async Task DeleteAsync(int id)&#10;        {&#10;            var user = await _context.Users.FindAsync(id);&#10;            if (user != null)&#10;            {&#10;                _context.Users.Remove(user);&#10;                await _context.SaveChangesAsync();&#10;            }&#10;        }&#10;    }&#10;}&#10;&#10;" />
+              <option name="updatedContent" value="using Data;&#10;using Microsoft.EntityFrameworkCore;&#10;using System;&#10;using System.Collections.Generic;&#10;using System.Threading.Tasks;&#10;&#10;namespace Repositories&#10;{&#10;    public class UserRepository : BaseRepository&lt;User&gt;&#10;    {&#10;        public UserRepository(ClickZillaContext context) : base(context) { }&#10;&#10;        public async Task&lt;User&gt; GetByUserNameAsync(string userName)&#10;        {&#10;            var result = await _dbSet.FirstOrDefaultAsync(u =&gt; u.UserName == userName);&#10;            if (result == null)&#10;                throw new Exception(&quot;Data not found&quot;);&#10;            return result;&#10;        }&#10;&#10;        public async Task&lt;User&gt; GetByNameAsync(string userName)&#10;        {&#10;            return await _dbSet.FirstOrDefaultAsync(u =&gt; u.UserName == userName);&#10;        }&#10;    }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

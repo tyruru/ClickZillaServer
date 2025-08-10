@@ -6,14 +6,16 @@ using Services;
 namespace ClickZillaServer.Controllers;
 
 [ApiController]
-[Route("User")]
+[Route("MobKilled")]
 public class MobKilledController : ControllerBase
 {
     private readonly UserService _userService;
+    private readonly EnemyService _enemyService;
 
-    public MobKilledController(UserService userService)
+    public MobKilledController(UserService userService, EnemyService enemyService)
     {
         _userService = userService;
+        _enemyService = enemyService;
     }
 
     [HttpPut]
@@ -21,18 +23,21 @@ public class MobKilledController : ControllerBase
     {
         Debug.Assert(mobKilledRequest != null, "Request cannot be null");
         var user = await _userService.GetByIdAsync(mobKilledRequest.UserId);
+        var enemy = await _enemyService.GetEnemyByNameAsync(mobKilledRequest.EnemyName);
+        Debug.Assert(user != null, "User not found");
+        Debug.Assert(enemy != null, "Enemy not found");
         
-        // user.UserExp = mobKilledRequest.UserExp ?? user.UserExp;
-        // user.EnemiesKilled = mobKilledRequest.EnemiesKilled ?? user.EnemiesKilled;
+        user.UserExp += enemy.Exp;
+        user.EnemiesKilled++;
 
         await _userService.UpdateAsync(user);
-        var userModel = new UserModel
+        var mobKilledModel = new MobKilledModel
         {
-            UserId = user.Id,
-            UserName = user.UserName,
-            UserExp = user.UserExp,
-            EnemiesKilled = user.EnemiesKilled
+           Exp = user.UserExp,
+           EnemiesKilled = user.EnemiesKilled,
+           CurrentEnemyName = enemy.Name,
+           IsNewLocateUnlocked = false
         };
-        return Ok(userModel);
+        return Ok(mobKilledModel);
     }
 }
